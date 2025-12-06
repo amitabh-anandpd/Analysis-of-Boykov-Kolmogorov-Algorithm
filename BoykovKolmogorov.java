@@ -10,6 +10,7 @@ public class BoykovKolmogorov {
     static final int FREE = 0;
     static final int S_TREE = 1;
     static final int T_TREE = -1;
+    Integer finalMaxFlow = -1;
 
     BoykovKolmogorov(Integer numNodes) {
         this.numNodes = numNodes;
@@ -30,6 +31,9 @@ public class BoykovKolmogorov {
         this.capacities.get(from).set(to, capacity);
         this.adjList.get(from).add(to);
         this.adjList.get(to).add(from);
+    }
+    public Integer getCapacity(int from, int to) {
+        return this.capacities.get(from).get(to);
     }
     public Integer residual(int from, int to) {
         return this.capacities.get(from).get(to) - this.flows.get(from).get(to);
@@ -135,9 +139,21 @@ public class BoykovKolmogorov {
                     }
                 }
             }
-            return totalflow;
         }
-        
-        return 0;
+        this.finalMaxFlow = totalflow;
+        return totalflow;
+    }
+
+    public Integer previousFlow() {
+        return this.finalMaxFlow;
+    }
+
+    public void resetFlow(){
+        this.finalMaxFlow = -1;
+        for (int i = 0; i < numNodes; i++) {
+            for (int j = 0; j < numNodes; j++) {
+                flows.get(i).set(j, 0);
+            }
+        }
     }
 }
